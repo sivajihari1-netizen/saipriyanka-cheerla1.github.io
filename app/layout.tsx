@@ -3,24 +3,29 @@ import { client }         from '@/sanity/client';
 import { SITE_SETTINGS_QUERY } from '@/sanity/queries';
 import './globals.css';
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://saipriyankacheerla.com';
+
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await client.fetch(SITE_SETTINGS_QUERY).catch(() => null);
   return {
     title: {
-      default: settings?.siteTitle || 'Saipriyanka Cheerla — Finance Intelligence',
+      default: settings?.siteTitle ?? 'Saipriyanka Cheerla — Finance Intelligence',
       template: '%s | Saipriyanka Cheerla',
     },
-    description: settings?.siteDescription ||
+    description:
+      settings?.siteDescription ??
       'Insights on capital markets, financial regulation, and analytical frameworks.',
     openGraph: {
-      type:   'website',
-      locale: 'en_IN',
-      url:    process.env.NEXT_PUBLIC_SITE_URL,
+      type:     'website',
+      locale:   'en_IN',
+      url:      siteUrl,
       siteName: 'Saipriyanka Cheerla',
-      images: settings?.ogImageUrl ? [{ url: settings.ogImageUrl, width: 1200, height: 630 }] : [],
+      images:   settings?.ogImageUrl
+        ? [{ url: settings.ogImageUrl, width: 1200, height: 630 }]
+        : [],
     },
     twitter: { card: 'summary_large_image' },
-    robots: { index: true, follow: true },
+    robots:  { index: true, follow: true },
   };
 }
 
